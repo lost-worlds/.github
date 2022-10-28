@@ -45,7 +45,6 @@ jobs:
           touch .env
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> .env
-          cat .env
 
       - id: "deploy"
         name: "Deploy indexer"
