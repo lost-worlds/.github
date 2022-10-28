@@ -1,0 +1,56 @@
+name: Deploy GAE Service
+
+on:
+  workflow_call:
+    inputs:
+      env_name:
+        required: true
+        type: string
+      env_string:
+        required: true
+        type: string
+      secrets:
+        GCP_SA_KEY:
+          required: true
+          type: string
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.env_name }}
+    env:
+      SECRET: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
+
+    steps:
+      - id: "checkout"
+        name: Checkout
+        uses: actions/checkout@v3
+
+      - id: "build"
+        name: "Build"
+        run: |-
+          yarn
+          yarn build
+
+      - id: "auth"
+        name: "Authentication"
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - id: "build_env"
+        name: "Make .env"
+        run: |
+          touch .env
+          ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
+          echo "$ENV_STRING" >> .env
+          cat .env
+
+      - id: "deploy"
+        name: "Deploy indexer"
+        uses: "google-github-actions/deploy-appengine@v0"
+
+      - id: "output"
+        name: "Deployed url"
+        run: 'echo "${{ steps.deploy.outputs.url }}"'
