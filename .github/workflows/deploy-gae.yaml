@@ -12,7 +12,6 @@ on:
     secrets:
       GCP_SA_KEY:
         required: true
-        type: string
 
 jobs:
   deployment:
