@@ -9,6 +9,9 @@ on:
       env_string:
         required: true
         type: string
+      working_directory:
+        type: string
+        default: "."
     secrets:
       GCP_SA_KEY:
         required: true
@@ -48,6 +51,8 @@ jobs:
       - id: "deploy"
         name: "Deploy indexer"
         uses: "google-github-actions/deploy-appengine@v0"
+        with:
+          working_directory: ${{ inputs.working_directory }}
 
       - id: "output"
         name: "Deployed url"
