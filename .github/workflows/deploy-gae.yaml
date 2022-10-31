@@ -32,6 +32,7 @@ jobs:
       - id: "build"
         name: "Build"
         run: |-
+          cd "${{ inputs.working_directory }}"
           yarn
           yarn build
 
@@ -44,9 +45,10 @@ jobs:
       - id: "build_env"
         name: "Make .env"
         run: |
-          touch .env
+          FILE="${{ inputs.working_directory }}/.env"
+          touch $FILE
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
-          echo "$ENV_STRING" >> .env
+          echo "$ENV_STRING" >> $FILE
 
       - id: "deploy"
         name: "Deploy indexer"
