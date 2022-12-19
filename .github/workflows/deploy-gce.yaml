@@ -12,12 +12,12 @@ on:
       working_directory:
         type: string
         default: "."
-    secrets:
-      PGP_SECRET_SIGNING_PASSPHRASE:
-        required: true
       GCE_INSTANCE:
         required: true
       GCE_INSTANCE_ZONE:
+        required: true
+    secrets:
+      PGP_SECRET_SIGNING_PASSPHRASE:
         required: true
       GCE_PROJECT:
         required: true
@@ -32,9 +32,9 @@ jobs:
       # Env specific
       GCE_PROJECT: "${{ secrets.GCE_PROJECT }}"
 
-      # Repo specific
-      GCE_INSTANCE: "${{ secrets.GCE_INSTANCE }}"
-      GCE_INSTANCE_ZONE: "${{ secrets.GCE_INSTANCE_ZONE }}"
+      # "Repo" specific, env agnostic
+      GCE_INSTANCE: "${{ inputs.GCE_INSTANCE }}"
+      GCE_INSTANCE_ZONE: "${{ inputs.GCE_INSTANCE_ZONE }}"
 
       # Org specific
       PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
