@@ -12,11 +12,17 @@ on:
       env_name:
         required: true
         type: string
+      env_string:
+        required: false
+        type: string
 
 jobs:
   deploy:
     runs-on: "ubuntu-latest"
     environment: "${{ inputs.env_name }}"
+    env:
+      # Org specific
+      PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
     defaults:
       run:
         working-directory: "${{ inputs.directory }}/${{ inputs.function }}"
@@ -32,6 +38,14 @@ jobs:
         uses: "google-github-actions/auth@v1"
         with:
           credentials_json: "${{ secrets.FUNCTIONS_CREDENTIALS }}"
+
+      - id: "build_env"
+        name: "Make .env"
+        run: |
+          FILE="./.env"
+          touch $FILE
+          ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
+          echo "$ENV_STRING" >> $FILE
 
       - id: "build"
         name: "Build"
