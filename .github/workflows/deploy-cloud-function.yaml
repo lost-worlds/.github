@@ -1,0 +1,53 @@
+name: Deploy Cloud Function
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        required: true
+        type: string
+      function:
+        required: true
+        type: string
+      env_name:
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: "ubuntu-latest"
+    environment: "${{ inputs.env_name }}"
+    defaults:
+      run:
+        working-directory: "${{ inputs.directory }}/${{ inputs.function }}"
+
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    steps:
+      - uses: "actions/checkout@v3"
+
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.FUNCTIONS_CREDENTIALS }}"
+
+      - id: "build"
+        name: "Build"
+        run: |-
+          yarn
+          yarn build
+
+      - id: "deploy"
+        uses: "google-github-actions/deploy-cloud-functions@v1"
+        with:
+          name: "${{ inputs.function }}"
+          runtime: "nodejs16"
+          source_dir: "${{ inputs.directory }}/${{ inputs.function }}"
+          entry_point: "${{ inputs.function }}"
+
+      # Example of using the output
+      - id: "test"
+        run: |-
+          echo "${{ steps.deploy.outputs.url }}"
