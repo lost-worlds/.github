@@ -14,8 +14,10 @@ on:
         default: "."
       GCE_INSTANCE:
         required: true
+        type: string
       GCE_INSTANCE_ZONE:
         required: true
+        type: string
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
         required: true

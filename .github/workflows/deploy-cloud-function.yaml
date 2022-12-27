@@ -15,6 +15,11 @@ on:
       env_string:
         required: false
         type: string
+    secrets:
+      PGP_SECRET_SIGNING_PASSPHRASE:
+        required: true
+      FUNCTIONS_CREDENTIALS:
+        required: true
 
 jobs:
   deploy:
