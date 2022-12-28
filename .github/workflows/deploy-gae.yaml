@@ -24,7 +24,7 @@ jobs:
     environment:
       name: ${{ inputs.env_name }}
     env:
-      SECRET: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
+      PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
 
     steps:
       - id: "checkout"
@@ -49,7 +49,7 @@ jobs:
         run: |
           FILE="${{ inputs.working_directory }}/.env"
           touch $FILE
-          ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
+          ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> $FILE
 
       - id: "deploy"

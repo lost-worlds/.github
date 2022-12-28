@@ -49,7 +49,7 @@ jobs:
         run: |
           FILE="./.env"
           touch $FILE
-          ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
+          ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> $FILE
 
       - id: "build"
