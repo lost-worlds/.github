@@ -18,7 +18,7 @@ on:
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
         required: true
-      FUNCTIONS_CREDENTIALS:
+      CLOUD_FUNCTIONS_CREDENTIALS:
         required: true
 
 jobs:
@@ -42,7 +42,7 @@ jobs:
       - id: "auth"
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: "${{ secrets.FUNCTIONS_CREDENTIALS }}"
+          credentials_json: "${{ secrets.CLOUD_FUNCTIONS_CREDENTIALS }}"
 
       - id: "build_env"
         name: "Make .env"
