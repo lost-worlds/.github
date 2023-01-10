@@ -41,6 +41,10 @@ jobs:
       # Org specific
       PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
 
+    defaults:
+      run:
+        working-directory: "${{ inputs.working_directory }}"
+
     # Add "id-token" with the intended permissions.
     permissions:
       contents: "read"
@@ -72,7 +76,7 @@ jobs:
       - id: "build_env"
         name: "Build .env"
         run: |
-          FILE="${{ inputs.working_directory }}/.env"
+          FILE="./.env"
           touch $FILE
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> $FILE
