@@ -14,7 +14,6 @@ on:
         type: string
       env_string:
         required: false
-        default: ""
         type: string
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
@@ -67,7 +66,6 @@ jobs:
           source_dir: "${{ inputs.directory }}/${{ inputs.function }}"
           entry_point: "${{ inputs.function }}"
 
-      # Example of using the output
       - id: "test"
         run: |-
           echo "${{ steps.deploy.outputs.url }}"

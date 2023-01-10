@@ -25,7 +25,7 @@ Deploy a single Cloud Function
 
 #### Secrets
 
-- `FUNCTIONS_CREDENTIALS` - Service account key with the [proper permissions](https://github.com/lost-worlds/service-account-builders/blob/main/create-gh-cloud-function-deployer.sh)
+- `CLOUD_FUNCTIONS_CREDENTIALS` - Service account key with the [proper permissions](https://github.com/lost-worlds/gcloud-helpers/blob/main/service-account-builders/create-gh-cloud-functions-deployer.sh)
 
 ### deploy-gae
 
@@ -39,7 +39,7 @@ Deploy GAE Instance
 
 #### Secrets
 
-- `GAE_CREDENTIALS` - Service account key with the [proper permissions](https://github.com/lost-worlds/service-account-builders/blob/main/create-gh-gae-deployer.sh)
+- `GAE_CREDENTIALS` - Service account key with the [proper permissions](https://github.com/lost-worlds/gcloud-helpers/blob/main/service-account-builders/create-gh-gae-deployer.sh)
 
 ### deploy-gce
 
@@ -56,4 +56,4 @@ Deploy GCE Instance
 #### Secrets
 
 - `GCE_PROJECT` - The project we are targeting with the deployment
-- `GCE_CREDENTIALS` - Service account key with the [proper permissions](https://github.com/lost-worlds/service-account-builders/blob/main/create-gh-gce-deployer.sh)
+- `GCE_CREDENTIALS` - Service account key with the [proper permissions](https://github.com/lost-worlds/gcloud-helpers/blob/main/service-account-builders/create-gh-gce-deployer.sh)
