@@ -14,6 +14,7 @@ on:
         type: string
       env_string:
         required: false
+        default: ""
         type: string
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
