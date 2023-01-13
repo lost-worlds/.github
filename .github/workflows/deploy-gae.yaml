@@ -53,7 +53,7 @@ jobs:
           echo "$ENV_STRING" >> $FILE
 
       - id: "deploy"
-        name: "Deploy indexer"
+        name: "Deploy GAE Instance"
         uses: "google-github-actions/deploy-appengine@v0"
         with:
           working_directory: ${{ inputs.working_directory }}
