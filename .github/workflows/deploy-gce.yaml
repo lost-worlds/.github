@@ -33,7 +33,7 @@ jobs:
     environment: "${{ inputs.env_name }}"
     env:
       # Env specific
-      GCE_PROJECT: "${{ vars.GCE_PROJECT }}"
+      GCE_PROJECT: "${{ inputs.GCE_PROJECT }}"
 
       # "Repo" specific, env agnostic
       GCE_INSTANCE: "${{ inputs.GCE_INSTANCE }}"
