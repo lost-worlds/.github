@@ -18,10 +18,11 @@ on:
       GCE_INSTANCE_ZONE:
         required: true
         type: string
+      GCE_PROJECT:
+        required: true
+        type: string
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
-        required: true
-      GCE_PROJECT:
         required: true
       GCE_CREDENTIALS:
         required: true
@@ -32,7 +33,7 @@ jobs:
     environment: "${{ inputs.env_name }}"
     env:
       # Env specific
-      GCE_PROJECT: "${{ secrets.GCE_PROJECT }}"
+      GCE_PROJECT: "${{ vars.GCE_PROJECT }}"
 
       # "Repo" specific, env agnostic
       GCE_INSTANCE: "${{ inputs.GCE_INSTANCE }}"
