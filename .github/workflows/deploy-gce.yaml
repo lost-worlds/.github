@@ -34,9 +34,6 @@ jobs:
       # Organizational
       PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
 
-      # Environmental
-      GCE_CREDENTIALS: "${{ secrets.GCE_CREDENTIALS }}"
-
       ## Vars
 
       # Environmental
@@ -65,7 +62,7 @@ jobs:
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: "$GCE_CREDENTIALS"
+          credentials_json: "${{ secrets.GCE_CREDENTIALS }}"
 
       # Setup gcloud CLI
       - name: "Set up Cloud SDK"
