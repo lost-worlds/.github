@@ -18,9 +18,6 @@ on:
       GCE_INSTANCE_ZONE:
         required: true
         type: string
-      GCE_PROJECT:
-        required: true
-        type: string
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
         required: true
@@ -32,15 +29,22 @@ jobs:
     runs-on: ubuntu-latest
     environment: "${{ inputs.env_name }}"
     env:
-      # Env specific
-      GCE_PROJECT: "${{ inputs.GCE_PROJECT }}"
+      ## Secrets
 
-      # "Repo" specific, env agnostic
+      # Organizational
+      PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
+
+      # Environmental
+      GCE_CREDENTIALS: "${{ secrets.GCE_CREDENTIALS }}"
+
+      ## Vars
+
+      # Environmental
+      GCE_PROJECT: "${{ vars.GCE_PROJECT }}"
+
+      # Inputs
       GCE_INSTANCE: "${{ inputs.GCE_INSTANCE }}"
       GCE_INSTANCE_ZONE: "${{ inputs.GCE_INSTANCE_ZONE }}"
-
-      # Org specific
-      PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
 
     defaults:
       run:
@@ -61,7 +65,7 @@ jobs:
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: "${{ secrets.GCE_CREDENTIALS }}"
+          credentials_json: "$GCE_CREDENTIALS"
 
       # Setup gcloud CLI
       - name: "Set up Cloud SDK"
