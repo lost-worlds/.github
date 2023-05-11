@@ -108,3 +108,4 @@ jobs:
           gcloud compute instances update-container "$GCE_INSTANCE" \
             --zone "$GCE_INSTANCE_ZONE" \
             --container-image "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA"
+            --container-env-file="./.env"
