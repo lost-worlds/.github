@@ -21,6 +21,8 @@ on:
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
         required: true
+      GH_REGISTRY_PAT:
+        required: true
       GCE_CREDENTIALS:
         required: true
 
@@ -33,6 +35,7 @@ jobs:
 
       # Organizational
       PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
+      GH_REGISTRY_PAT: ${{ secrets.GH_REGISTRY_PAT }}
 
       ## Vars
 
@@ -87,7 +90,7 @@ jobs:
       - id: "build"
         name: "Build"
         run: |-
-          docker build --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" .
+          docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=8080 --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" .
 
       # Push the Docker image to Google Container Registry
       - id: "publish"
