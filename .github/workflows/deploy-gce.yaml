@@ -12,6 +12,9 @@ on:
       working_directory:
         type: string
         default: "."
+      PORT:
+        type: number
+        default: 8080
       GCE_INSTANCE:
         required: true
         type: string
@@ -90,7 +93,7 @@ jobs:
       - id: "build"
         name: "Build"
         run: |-
-          docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=8080 --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" .
+          docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=${PORT} --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" .
 
       # Push the Docker image to Google Container Registry
       - id: "publish"
