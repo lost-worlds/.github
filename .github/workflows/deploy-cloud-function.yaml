@@ -18,6 +18,8 @@ on:
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
         required: true
+      GH_REGISTRY_PAT:
+        required: true
       CLOUD_FUNCTIONS_CREDENTIALS:
         required: true
 
