@@ -15,6 +15,8 @@ on:
     secrets:
       PGP_SECRET_SIGNING_PASSPHRASE:
         required: true
+      GH_REGISTRY_PAT:
+        required: true
       GAE_CREDENTIALS:
         required: true
 
@@ -25,6 +27,7 @@ jobs:
       name: ${{ inputs.env_name }}
     env:
       PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
+      GH_REGISTRY_PAT: ${{ secrets.GH_REGISTRY_PAT }}
 
     steps:
       - id: "checkout"
@@ -35,6 +38,8 @@ jobs:
         name: "Build"
         run: |-
           cd "${{ inputs.working_directory }}"
+          npm config set @lost-worlds:registry=https://npm.pkg.github.com
+          npm config set '//npm.pkg.github.com/:_authToken' "$GH_REGISTRY_PAT"
           yarn
           yarn build
 
