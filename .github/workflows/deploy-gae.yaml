@@ -26,6 +26,9 @@ jobs:
     environment:
       name: ${{ inputs.env_name }}
     env:
+      ## Secrets
+
+      # Organizational
       PGP_SECRET_SIGNING_PASSPHRASE: ${{ secrets.PGP_SECRET_SIGNING_PASSPHRASE }}
       GH_REGISTRY_PAT: ${{ secrets.GH_REGISTRY_PAT }}
 
