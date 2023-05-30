@@ -42,7 +42,7 @@ jobs:
         run: |-
           cd "${{ inputs.working_directory }}"
           npm config set @lost-worlds:registry=https://npm.pkg.github.com
-          npm config set //npm.pkg.github.com/:_authToken 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
+          npm config set //npm.pkg.github.com/:_authToken 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
           yarn
           yarn build
 
