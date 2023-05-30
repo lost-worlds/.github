@@ -41,12 +41,8 @@ jobs:
         name: "Build"
         run: |-
           cd "${{ inputs.working_directory }}"
-          echo "$GH_REGISTRY_PAT"
-          echo $GH_REGISTRY_PAT
-          echo ${{ secrets.GH_REGISTRY_PAT }}
           npm config set @lost-worlds:registry=https://npm.pkg.github.com
-          npm config set '//npm.pkg.github.com/:_authToken' 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
-          yarn add @lost-worlds/data-structures@1.2.32
+          npm config set //npm.pkg.github.com/:_authToken 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
           yarn
           yarn build
 
