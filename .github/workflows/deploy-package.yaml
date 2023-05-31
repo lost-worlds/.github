@@ -34,9 +34,8 @@ jobs:
           NEW_VERSION=$(node -p "require('./package.json').version")
           git add package.json
           git commit -m "[no ci] $NEW_VERSION"
+          git push
 
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_REGISTRY_PAT }}
-
-      - run: git push
