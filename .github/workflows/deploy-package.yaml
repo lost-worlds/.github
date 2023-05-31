@@ -2,6 +2,9 @@ name: Deploy Package
 
 on:
   workflow_call:
+    secrets:
+      GH_REGISTRY_PAT:
+        required: true
 
 jobs:
   deployment:
@@ -19,7 +22,6 @@ jobs:
   
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@lost-worlds'
 
@@ -35,6 +37,6 @@ jobs:
 
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_REGISTRY_PAT }}
 
       - run: git push
