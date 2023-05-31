@@ -62,9 +62,10 @@ jobs:
 
       - id: "deploy"
         name: "Deploy GAE Instance"
-        uses: "google-github-actions/deploy-appengine@v0"
-        with:
-          working_directory: ${{ inputs.working_directory }}
+        run: |
+          gcloud auth activate-service-account --key-file <(echo "${{ secrets.GAE_CREDENTIALS }}")
+          gcloud config set project lost-worlds-$env_name
+          gcloud app deploy "${{ inputs.working_directory }}"
 
       - id: "output"
         name: "Deployed url"
