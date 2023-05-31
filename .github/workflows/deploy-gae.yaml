@@ -46,12 +46,6 @@ jobs:
           yarn
           yarn build
 
-      - id: "auth"
-        name: "Authentication"
-        uses: "google-github-actions/auth@v0"
-        with:
-          credentials_json: "${{ secrets.GAE_CREDENTIALS }}"
-
       - id: "build_env"
         name: "Make .env"
         run: |
@@ -60,13 +54,17 @@ jobs:
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> $FILE
 
+      - id: "auth"
+        name: "Authentication"
+        uses: google-github-actions/auth@v0
+        with:
+          credentials: ${{ secrets.GAE_CREDENTIALS }}
+
       - id: "deploy"
         name: "Deploy GAE Instance"
         run: |
-          gcloud auth activate-service-account --key-file <(echo "${{ secrets.GAE_CREDENTIALS }}")
-          gcloud config set project lost-worlds-$env_name
           gcloud app deploy "${{ inputs.working_directory }}"
 
       - id: "output"
-        name: "Deployed url"
-        run: 'echo "${{ steps.deploy.outputs.url }}"'
+        name: "Deployed URL"
+        run: 'echo "The application has been deployed at: "${{ steps.deploy.outputs.url }}"'
