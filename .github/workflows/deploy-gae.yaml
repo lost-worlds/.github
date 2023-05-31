@@ -59,6 +59,13 @@ jobs:
           touch $FILE
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> $FILE
+          NPMRC="${{ inputs.working_directory }}/.npmrc"
+          touch $NPMRC
+          echo "
+            @lost-worlds:registry=https://npm.pkg.github.com
+            //npm.pkg.github.com/:_authToken="GH_REGISTRY_PAT"
+          " >> $NPMRC
+          cat $NPMRC
 
       - id: "deploy"
         name: "Deploy GAE Instance"
