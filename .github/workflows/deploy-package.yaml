@@ -6,7 +6,10 @@ on:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      packages: write
+  
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,16 +28,14 @@ jobs:
 
       - run: yarn
       - run: yarn build
+      - run: yarn version --patch --no-git-tag-version
 
-      - name: Patch
-        id: patch
+      - name: commit
         run: |
-          # Update package version
-          yarn version --patch --no-git-tag-version
           NEW_VERSION=$(node -p "require('./package.json').version")
           git add package.json
           git commit -m "[no ci] $NEW_VERSION"
-          git push
+          # git push
 
       - run: yarn publish
         env:
