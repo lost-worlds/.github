@@ -72,4 +72,4 @@ jobs:
 
       - id: "output"
         name: "Deployed URL"
-        run: 'echo "The application has been deployed at: \"${{ steps.deploy.outputs.url }}\"'
+        run: 'echo "${{ steps.deploy.outputs.url }}"'
