@@ -56,9 +56,9 @@ jobs:
 
       - id: "auth"
         name: "Authentication"
-        uses: google-github-actions/auth@v0
+        uses: "google-github-actions/auth@v0"
         with:
-          credentials: ${{ secrets.GAE_CREDENTIALS }}
+          credentials_json: "${{ secrets.GAE_CREDENTIALS }}"
 
       - id: "deploy"
         name: "Deploy GAE Instance"
