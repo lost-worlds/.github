@@ -6,9 +6,6 @@ on:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
   
     steps:
       - name: Checkout
@@ -35,8 +32,9 @@ jobs:
           NEW_VERSION=$(node -p "require('./package.json').version")
           git add package.json
           git commit -m "[no ci] $NEW_VERSION"
-          # git push
 
       - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: git push
