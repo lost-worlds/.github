@@ -1,0 +1,28 @@
+name: Deploy Package
+
+on:
+  workflow_call:
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create .npmrc file
+        id: npmrc_creation
+        run: |
+          echo '@lost-worlds:registry=https://npm.pkg.github.com' > .npmrc
+
+      - name: Build
+        id: build
+        run: |
+          yarn
+          yarn build
+
+      - name: Publish to GitHub Packages
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
