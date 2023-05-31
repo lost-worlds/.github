@@ -6,6 +6,8 @@ on:
 jobs:
   deployment:
     runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
@@ -38,7 +40,9 @@ jobs:
           git commit -m "[no ci] $NEW_VERSION"
           git push
 
+      - name: Authenticate with GitHub Packages
+        run: npm login --registry=https://npm.pkg.github.com --scope=@lost-worlds --always-auth
+
       - name: Publish to GitHub Packages
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
