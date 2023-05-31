@@ -33,7 +33,7 @@ jobs:
           git add package.json
           git commit -m "[no ci] $NEW_VERSION"
 
-      - run: yarn publish
+      - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
