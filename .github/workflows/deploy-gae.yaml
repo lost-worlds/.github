@@ -46,12 +46,6 @@ jobs:
           yarn
           yarn build
 
-      - id: "auth"
-        name: "Authentication"
-        uses: "google-github-actions/auth@v0"
-        with:
-          credentials_json: "${{ secrets.GAE_CREDENTIALS }}"
-
       - id: "build_env"
         name: "Make .env"
         run: |
@@ -67,12 +61,17 @@ jobs:
           " >> $NPMRC
           cat $NPMRC
 
+      - id: "auth"
+        name: "Authentication"
+        uses: "google-github-actions/auth@v0"
+        with:
+          credentials_json: "${{ secrets.GAE_CREDENTIALS }}"
+
       - id: "deploy"
         name: "Deploy GAE Instance"
-        uses: "google-github-actions/deploy-appengine@v0"
-        with:
-          working_directory: ${{ inputs.working_directory }}
+        run: |
+          gcloud app deploy "${{ inputs.working_directory }}"
 
       - id: "output"
-        name: "Deployed url"
-        run: 'echo "${{ steps.deploy.outputs.url }}"'
+        name: "Deployed URL"
+        run: 'echo "The application has been deployed at: "${{ steps.deploy.outputs.url }}"'

@@ -1,0 +1,41 @@
+name: Deploy Package
+
+on:
+  workflow_call:
+    secrets:
+      GH_REGISTRY_PAT:
+        required: true
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - id: "git-setup"
+        name: Set up Git
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+  
+      - uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@lost-worlds'
+
+      - run: yarn
+      - run: yarn build
+      - run: yarn version --patch --no-git-tag-version
+
+      - name: commit
+        run: |
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          git add package.json
+          git commit -m "[no ci] $NEW_VERSION"
+          git push
+
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_REGISTRY_PAT }}
