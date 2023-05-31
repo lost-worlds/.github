@@ -11,6 +11,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - id: "git-setup"
+        name: Set up Git
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+  
       - name: Create .npmrc file
         id: npmrc_creation
         run: |
@@ -27,7 +33,7 @@ jobs:
         run: |
           # Update package version
           yarn version --patch
-          git push --force
+          git push
 
       - name: Publish to GitHub Packages
         run: npm publish
