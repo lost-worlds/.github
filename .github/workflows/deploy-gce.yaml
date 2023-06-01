@@ -89,15 +89,15 @@ jobs:
           echo "$ENV_STRING" >> $FILE
 
       # Build the Docker image
-      - name: "Build"
+      - name: "Build Image"
         run: docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=${PORT} --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" -f "${{ inputs.DOCKER_DIR }}"/Dockerfile .
 
       # Push the Docker image to Google Container Registry
-      - name: "Publish"
+      - name: "Publish Image"
         run: docker push "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA"
 
       # Deploy the new container by updating the GCE Instance
-      - name: "Deploy"
+      - name: "Deploy Image"
         run: |-
           gcloud compute instances update-container "$GCE_INSTANCE" \
             --zone "$GCE_INSTANCE_ZONE" \
