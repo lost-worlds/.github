@@ -62,13 +62,11 @@ jobs:
       id-token: "write"
 
     steps:
-      - id: "checkout"
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
 
       # Authentication via credentials json
-      - id: "auth"
-        name: "Authenticate to Google Cloud"
+      - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
           credentials_json: "${{ secrets.GCE_CREDENTIALS }}"
@@ -84,30 +82,28 @@ jobs:
           gcloud --quiet auth configure-docker
 
       # Build the .env file
-      - id: "build_env"
-        name: "Build .env"
+      - name: "Build .env"
         run: |
+          pwd
           FILE="./.env"
           touch $FILE
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> $FILE
 
       # Build the Docker image
-      - id: "build"
-        name: "Build"
+      - name: "Build"
         run: |-
           docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=${PORT} --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" -f "${{ inputs.DOCKER_DIR }}"/Dockerfile .
 
       # Push the Docker image to Google Container Registry
-      - id: "publish"
-        name: "Publish"
+      - name: "Publish"
         run: |-
           docker push "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA"
 
       # Deploy the new container by updating the GCE Instance
-      - id: "deploy"
-        name: "Deploy"
+      - name: "Deploy"
         run: |-
+          ls -la
           gcloud compute instances update-container "$GCE_INSTANCE" \
             --zone "$GCE_INSTANCE_ZONE" \
             --container-image "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA"
