@@ -78,13 +78,11 @@ jobs:
       # Configure Docker to use the gcloud command-line tool as a credential
       # helper for authentication
       - name: "Configure Docker"
-        run: |-
-          gcloud --quiet auth configure-docker
+        run: gcloud --quiet auth configure-docker
 
       # Build the .env file
       - name: "Build .env"
         run: |
-          pwd
           FILE="./.env"
           touch $FILE
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
@@ -92,19 +90,16 @@ jobs:
 
       # Build the Docker image
       - name: "Build"
-        run: |-
-          docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=${PORT} --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" -f "${{ inputs.DOCKER_DIR }}"/Dockerfile .
+        run: docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=${PORT} --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" -f "${{ inputs.DOCKER_DIR }}"/Dockerfile .
 
       # Push the Docker image to Google Container Registry
       - name: "Publish"
-        run: |-
-          docker push "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA"
+        run: docker push "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA"
 
       # Deploy the new container by updating the GCE Instance
       - name: "Deploy"
         run: |-
-          ls -la
           gcloud compute instances update-container "$GCE_INSTANCE" \
             --zone "$GCE_INSTANCE_ZONE" \
-            --container-image "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA"
+            --container-image "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" \
             --container-env-file="./.env"
