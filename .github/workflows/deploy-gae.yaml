@@ -33,34 +33,24 @@ jobs:
       GH_REGISTRY_PAT: ${{ secrets.GH_REGISTRY_PAT }}
 
     steps:
-      - id: "checkout"
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - id: "build"
-        name: "Build"
-        run: |-
-          cd "${{ inputs.working_directory }}"
-          npm config set @lost-worlds:registry=https://npm.pkg.github.com
-          npm config set //npm.pkg.github.com/:_authToken "$GH_REGISTRY_PAT"
-          yarn
-          yarn build
-
-      - id: "build_env"
-        name: "Make .env"
+      - name: "Make .env"
         run: |
           FILE="${{ inputs.working_directory }}/.env"
           touch $FILE
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> $FILE
+
+      - name: Make .npmrc
+        run: |
           NPMRC="${{ inputs.working_directory }}/.npmrc"
           touch $NPMRC
           echo "@lost-worlds:registry=https://npm.pkg.github.com" >> $NPMRC
           echo "//npm.pkg.github.com/:_authToken=$GH_REGISTRY_PAT" >> $NPMRC
-          cat $NPMRC
 
-      - id: "auth"
-        name: "Authentication"
+      - name: "Authentication"
         uses: "google-github-actions/auth@v0"
         with:
           credentials_json: "${{ secrets.GAE_CREDENTIALS }}"
@@ -70,6 +60,5 @@ jobs:
         run: |
           gcloud app deploy "${{ inputs.working_directory }}"
 
-      - id: "output"
-        name: "Deployed URL"
+      - name: "Deployed URL"
         run: 'echo "${{ steps.deploy.outputs.url }}"'
