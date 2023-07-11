@@ -9,7 +9,6 @@ on:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-  
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -19,13 +18,17 @@ jobs:
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-  
+
       - uses: actions/setup-node@v3
         with:
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@lost-worlds'
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@lost-worlds"
 
-      - run: yarn
+      - run: |
+          npm config set @lost-worlds:registry=https://npm.pkg.github.com
+          npm config set //npm.pkg.github.com/:_authToken "$GH_REGISTRY_PAT"
+          yarn
+
       - run: yarn build
       - run: yarn version --patch --no-git-tag-version
 
