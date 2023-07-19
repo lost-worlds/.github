@@ -7,8 +7,12 @@ on:
         required: true
 
 jobs:
+
   deployment:
     runs-on: ubuntu-latest
+    env:
+      # Organizational
+      GH_REGISTRY_PAT: ${{ secrets.GH_REGISTRY_PAT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
