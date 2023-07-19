@@ -20,8 +20,10 @@ jobs:
           git config user.name "GitHub Actions"
 
       - run: |
-          npm config set @lost-worlds:registry=https://npm.pkg.github.com
-          npm config set //npm.pkg.github.com/:_authToken "${{ secrets.GH_REGISTRY_PAT }}"
+          NPMRC="./.npmrc"
+          touch $NPMRC
+          echo "@lost-worlds:registry=https://npm.pkg.github.com" >> $NPMRC
+          echo "//npm.pkg.github.com/:_authToken=$GH_REGISTRY_PAT" >> $NPMRC
           yarn
 
       - run: yarn build
