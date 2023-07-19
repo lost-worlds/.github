@@ -9,9 +9,6 @@ on:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
     env:
       ## Secrets
 
@@ -43,7 +40,7 @@ jobs:
 
       - run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_REGISTRY_PAT }}
 
       - name: commit
         run: |
