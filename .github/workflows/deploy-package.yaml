@@ -7,12 +7,14 @@ on:
         required: true
 
 jobs:
-
   deployment:
     runs-on: ubuntu-latest
     env:
+      ## Secrets
+
       # Organizational
       GH_REGISTRY_PAT: ${{ secrets.GH_REGISTRY_PAT }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,16 +25,22 @@ jobs:
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
 
+      - run: |
+          npm config set @lost-worlds:registry=https://npm.pkg.github.com
+          npm config set //npm.pkg.github.com/:_authToken "$GH_REGISTRY_PAT"
+          yarn
+
+      - run: yarn build
+      - run: yarn version --patch --no-git-tag-version
+
       - uses: actions/setup-node@v3
         with:
-          registry-url: 'https://npm.pkg.github.com'
+          registry-url: "https://npm.pkg.github.com"
           scope: "@lost-worlds"
 
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_REGISTRY_PAT }}
-
-      - run: yarn version --patch --no-git-tag-version
 
       - name: commit
         run: |
