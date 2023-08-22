@@ -66,6 +66,13 @@ jobs:
           yarn
           yarn build
 
+      - name: Make .npmrc
+        run: |
+          NPMRC="${{ inputs.directory }}/${{ inputs.function }}/.npmrc"
+          touch $NPMRC
+          echo "@lost-worlds:registry=https://npm.pkg.github.com" >> $NPMRC
+          echo "//npm.pkg.github.com/:_authToken=$GH_REGISTRY_PAT" >> $NPMRC
+
       - id: "deploy"
         uses: "google-github-actions/deploy-cloud-functions@v1"
         with:
