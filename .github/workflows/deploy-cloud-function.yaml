@@ -68,7 +68,7 @@ jobs:
 
       - name: Make .npmrc
         run: |
-          NPMRC="${{ inputs.directory }}/${{ inputs.function }}/.npmrc"
+          NPMRC="./.npmrc"
           touch $NPMRC
           echo "@lost-worlds:registry=https://npm.pkg.github.com" >> $NPMRC
           echo "//npm.pkg.github.com/:_authToken=$GH_REGISTRY_PAT" >> $NPMRC
