@@ -15,8 +15,8 @@ on:
         type: number
       memory_mb:
         required: false
-        default: 1Gi
-        type: string
+        default: 1024
+        type: number
       env_name:
         required: true
         type: string
