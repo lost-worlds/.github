@@ -9,6 +9,14 @@ on:
       function:
         required: true
         type: string
+      timeout:
+        required: false
+        default: 60
+        type: number
+      memory_mb:
+        required: false
+        default: 1Gi
+        type: string
       env_name:
         required: true
         type: string
@@ -80,6 +88,8 @@ jobs:
           runtime: "nodejs16"
           source_dir: "${{ inputs.directory }}/${{ inputs.function }}"
           entry_point: "${{ inputs.function }}"
+          timeout: "${{ inputs.timeout }}"
+          memory_mb: "${{ inputs.memory_mb }}"
 
       - id: "test"
         run: |-
