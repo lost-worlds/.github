@@ -2,13 +2,8 @@
 
 **Lost Worlds is the first Location Based NFT Platform**
 
-Welcome to Lost Worlds! We are the first location-based platform for minting NFTs.
+Welcome to [Lost Worlds](lostworlds.io)! We are the first location-based platform for minting NFTs.
 
-We currently have two principal products:
+We are currently live on [Avalanche](https://www.avax.network/), [Polygon](https://polygon.technology/), and [Ethereum](https://ethereum.org/en/).
 
-1. [lostworlds.io](https://lostworlds.io) - Our principal application that we are actively developing and launching projects on
-2. [Launchpad](https://www.launchpad.lostworlds.io/) - A launchpad for _anyone_ to launch their own location-based NFT
-
-We are currently powered by the [Avalanche Blockchain](https://www.avax.network/).
-
-Please reach out to [lostarchitect@lostworlds.io](mailto:lostarchitect@lostworlds.io) to get involved!
+Please reach out to [adam@lostworlds.io](mailto:adam@lostworlds.io) with any questions or to get involved!
