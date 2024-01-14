@@ -64,7 +64,7 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=$GH_REGISTRY_PAT" >> $NPMRC
 
       - name: "Authentication"
-        uses: "google-github-actions/auth@v0"
+        uses: "google-github-actions/auth@v1"
         with:
           credentials_json: "${{ secrets.GAE_CREDENTIALS }}"
 
