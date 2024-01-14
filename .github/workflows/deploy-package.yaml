@@ -25,13 +25,15 @@ jobs:
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
 
+      - uses: pnpm/action-setup@v2
+
       - run: |
           npm config set @lost-worlds:registry=https://npm.pkg.github.com
           npm config set //npm.pkg.github.com/:_authToken "$GH_REGISTRY_PAT"
-          yarn
+          pnpm install
 
-      - run: yarn build
-      - run: yarn version --patch --no-git-tag-version
+      - run: pnpm build
+      - run: pnpm version --patch --no-git-tag-version
 
       - uses: actions/setup-node@v3
         with:

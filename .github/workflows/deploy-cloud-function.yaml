@@ -66,15 +66,18 @@ jobs:
           ENV_STRING=$(gpg --decrypt --quiet --batch --passphrase "$PGP_SECRET_SIGNING_PASSPHRASE" --output - <(echo "${{ inputs.env_string }}" | base64 --decode))
           echo "$ENV_STRING" >> $FILE
 
+      - uses: pnpm/action-setup@v2
+
       - id: "build"
         name: "Build"
         run: |-
           npm config set @lost-worlds:registry=https://npm.pkg.github.com
           npm config set '//npm.pkg.github.com/:_authToken' "$GH_REGISTRY_PAT"
-          yarn
-          yarn build
 
-      - name: Make .npmrc
+          pnpm install
+          pnpm build
+
+      - name: "Make .npmrc"
         run: |
           NPMRC="./.npmrc"
           touch $NPMRC
@@ -91,6 +94,6 @@ jobs:
           timeout: "${{ inputs.timeout }}"
           memory_mb: "${{ inputs.memory_mb }}"
 
-      - id: "test"
+      - name: "Print output"
         run: |-
           echo "${{ steps.deploy.outputs.url }}"
