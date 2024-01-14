@@ -26,6 +26,8 @@ jobs:
           git config user.name "GitHub Actions"
 
       - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - run: |
           npm config set @lost-worlds:registry=https://npm.pkg.github.com

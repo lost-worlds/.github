@@ -67,6 +67,8 @@ jobs:
           echo "$ENV_STRING" >> $FILE
 
       - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - id: "build"
         name: "Build"
