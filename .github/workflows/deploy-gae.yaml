@@ -46,7 +46,7 @@ jobs:
           cd "${{ inputs.working_directory }}"
           npm config set @lost-worlds:registry=https://npm.pkg.github.com
           npm config set //npm.pkg.github.com/:_authToken "$GH_REGISTRY_PAT"
-          pnpm i filter --api
+          pnpm i --filter api
           pnpm build
 
       - name: "Make .env"
