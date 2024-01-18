@@ -46,7 +46,7 @@ jobs:
           cd "${{ inputs.working_directory }}"
           npm config set @lost-worlds:registry=https://npm.pkg.github.com
           npm config set //npm.pkg.github.com/:_authToken "$GH_REGISTRY_PAT"
-          pnpm i --filter api
+          pnpm install
           pnpm build
 
       - name: "Make .env"
@@ -68,11 +68,10 @@ jobs:
         with:
           credentials_json: "${{ secrets.GAE_CREDENTIALS }}"
 
-      - id: "deploy"
-        name: "Deploy GAE Instance"
-        run: |
-          cp pnpm-lock.yaml "${{ inputs.working_directory }}"
-          gcloud app deploy "${{ inputs.working_directory }}"
+      - id: 'deploy'
+        uses: 'google-github-actions/deploy-appengine@v2'
+        with:
+          working_directory: ${{ inputs.working_directory }}
 
       - name: "Deployed URL"
         run: 'echo "${{ steps.deploy.outputs.url }}"'
