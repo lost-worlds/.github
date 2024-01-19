@@ -71,8 +71,6 @@ jobs:
       - id: "deploy"
         name: "Deploy GAE Instance"
         run: |
-          npx turbo prune api --docker
-          mv out/pnpm-lock.yaml "${{ inputs.working_directory }}"
           gcloud app deploy "${{ inputs.working_directory }}"
 
       - name: "Deployed URL"
