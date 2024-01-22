@@ -30,8 +30,8 @@ jobs:
           version: 8
 
       - run: |
-          npm config set @lost-worlds:registry=https://npm.pkg.github.com
-          npm config set //npm.pkg.github.com/:_authToken "$GH_REGISTRY_PAT"
+          pnpm config set @lost-worlds:registry=https://npm.pkg.github.com
+          pnpm config set //npm.pkg.github.com/:_authToken "$GH_REGISTRY_PAT"
           pnpm install
 
       - run: pnpm build
@@ -42,7 +42,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@lost-worlds"
 
-      - run: npm publish
+      - run: pnpm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_REGISTRY_PAT }}
 
