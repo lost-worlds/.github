@@ -32,6 +32,11 @@ on:
       GCE_CREDENTIALS:
         required: true
 
+
+env:
+  GAR_LOCATION: us-central1
+  REPOSITORY: lost-worlds
+
 jobs:
   deployment:
     runs-on: ubuntu-latest
@@ -89,17 +94,17 @@ jobs:
           echo "$ENV_STRING" >> $FILE
 
       # Build the Docker image
-      - name: "Build Image"
-        run: docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=${PORT} --tag "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" -f "${{ inputs.DOCKER_DIR }}"/Dockerfile .
-
-      # Push the Docker image to Google Container Registry
-      - name: "Publish Image"
-        run: docker push "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA"
+      - name: "Build and Push Image"
+        run: |-
+          IMAGE_NAME="${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.REPOSITORY }}/$GCE_INSTANCE:${{ github.sha }}"
+          docker build --build-arg GH_REGISTRY_PAT=${GH_REGISTRY_PAT} --build-arg PORT=${PORT} -t "$IMAGE_NAME" -f "${{ inputs.DOCKER_DIR }}"/Dockerfile .
+          docker push "$IMAGE_NAME"
 
       # Deploy the new container by updating the GCE Instance
       - name: "Deploy Image"
         run: |-
+          IMAGE_NAME="${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.REPOSITORY }}/$GCE_INSTANCE:${{ github.sha }}"
           gcloud compute instances update-container "$GCE_INSTANCE" \
             --zone "$GCE_INSTANCE_ZONE" \
-            --container-image "gcr.io/$GCE_PROJECT/$GCE_INSTANCE-image:$GITHUB_SHA" \
+            --container-image "$IMAGE_NAME" \
             --container-env-file="./.env"
