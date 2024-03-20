@@ -72,7 +72,7 @@ jobs:
       - name: "Auth"
         uses: "google-github-actions/auth@v2"
         with:
-          credentials_json: "${{ secrets.GCP_DEPLOYMENT_CREDENTIALS }}"
+          credentials_json: "${{ secrets.GCE_CREDENTIALS }}"
 
       # NOTE: Auth to docker
       - name: "Configure Docker"
